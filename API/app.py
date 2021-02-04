@@ -194,7 +194,6 @@ class RecursoUnEvento(Resource):
 
     @app.route('/')
     @cross_origin()
-    @login_required
     def delete(self,id_evento):
         evento = Evento.query.get_or_404(id_evento)
         db.session.delete(evento)
