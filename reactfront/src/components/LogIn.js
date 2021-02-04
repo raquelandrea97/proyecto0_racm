@@ -12,8 +12,13 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-
+import { useHistory } from 'react-router-dom';
 import Slide from '@material-ui/core/Slide';
+import Cookies from 'universal-cookie';
+
+import {
+    Redirect
+  } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -22,11 +27,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function LogIn() {
   const correoRef = useRef();
   const passwRef = useRef();
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     instance
       .post(
-        '/log-auth/',
+        '/sign_in',
         {
           //username: 'test3@test.com',
           //password: 'test123',
@@ -40,9 +46,17 @@ export default function LogIn() {
         }
       )
       .then((resp) => {
-        console.log(resp.data.token);
-
-        setToken(resp.data.token);
+        console.log(resp);
+        localStorage.setItem("authentication", resp.data.signed_in)
+        //const cookies = new Cookies();
+        //cookies.set('myCat', 'Pacman', { path: '/' });
+        //console.log(cookies.get('myCat'));
+        if (resp.data.signed_in == true) {
+            history.push('/');
+        }
+        else{
+            alert("Clave incorrecta")
+        }
       })
       .catch((e) => {
         alert("Credenciales incorrectas.")

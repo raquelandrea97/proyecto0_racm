@@ -37,8 +37,8 @@ export default function CreateEvent() {
           //password: 'test123',
           event_name: nameRef.current.children[1].children[0].value,
           event_category: categoryRef.current.children[1].children[0].value,
-          event_category: placeRef.current.children[1].children[0].value,
-          event_place: addressRef.current.children[1].children[0].value,
+          event_place: placeRef.current.children[1].children[0].value,
+          event_address: addressRef.current.children[1].children[0].value,
           event_start_date: startDateRef.current.children[1].children[0].value,
           event_end_date: endDateRef.current.children[1].children[0].value,
           event_type: typeRef.current.children[1].children[0].value,
@@ -50,10 +50,10 @@ export default function CreateEvent() {
         }
       )
       .then((resp) => {
-        console.log(resp.data);
+        console.log(resp);
       })
       .catch((e) => {
-        alert("Credenciales incorrectas.")
+        alert("No se ha podido crear el evento")
       });
   };
   return (

@@ -7,9 +7,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import CreateEvent from './CreateEvent'
+import CreateEvent from './CreateEvent';
+import { Button } from '@material-ui/core';
 
 
 const columns = [
@@ -76,9 +76,27 @@ export default function StickyHeadTable() {
       });
   }, []);
 
+  function deleteItem(id){
+    let items = [];
+    instance
+        .delete('/events/'+id)
+        .then((res) => {
+            console.log(res.data);
+            items = eventos.filter(element => element.id !== id);
+            setEventos(items);
+            alert('Registro correctamente eliminado')
+        })
+        .catch((err) =>{
+            console.log(err)
+        })
+  };
+  
+
   return (
     <>
     <Paper className={classes.root}>
+    <CreateEvent>
+    </CreateEvent>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -118,14 +136,15 @@ export default function StickyHeadTable() {
                     <TableCell align={evento.align}>
                         {evento.event_type}
                     </TableCell>
+                    <TableCell align={evento.align}>
+                        <Button onClick={() => deleteItem(evento.id)}>Delete</Button>
+                    </TableCell>
                 </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
     </Paper>
-    <CreateEvent>
-    </CreateEvent>
     </>
   );
 }

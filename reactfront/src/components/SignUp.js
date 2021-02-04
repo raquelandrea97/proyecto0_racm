@@ -26,7 +26,7 @@ export default function SignUp() {
   const handleSubmit = (e) => {
     instance
       .post(
-        '/sign-auth/',
+        '/register',
         {
           //username: 'test3@test.com',
           //password: 'test123',
@@ -40,12 +40,10 @@ export default function SignUp() {
         }
       )
       .then((resp) => {
-        console.log(resp.data.token);
-
-        setToken(resp.data.token);
+        console.log(resp);
       })
       .catch((e) => {
-        alert("Credenciales incorrectas.")
+        alert("No es posible registrarse")
       });
   };
   const token = useToken();

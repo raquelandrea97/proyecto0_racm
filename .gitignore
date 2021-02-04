@@ -1,2 +1,4 @@
 API/__pycache__/app.cpython-39.pyc
 API/test.db
+node_modules/
+.eslintcache*
