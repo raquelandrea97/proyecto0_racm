@@ -27,11 +27,11 @@ export default function CreateEvent() {
   const startDateRef = useRef();
   const endDateRef = useRef();
   const typeRef = useRef();
-
+  const user_save = localStorage.getItem('authentication');
   const handleSubmit = (e) => {
     instance
       .post(
-        '/events',
+        `/events/${user_save}`,
         {
           //username: 'test3@test.com',
           //password: 'test123',

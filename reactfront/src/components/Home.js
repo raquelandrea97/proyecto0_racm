@@ -10,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CreateEvent from './CreateEvent';
 import { Button } from '@material-ui/core';
+import { useToken } from '../store/TokenContext';
 
 
 const columns = [
@@ -63,10 +64,13 @@ const useStyles = makeStyles({
 
 export default function StickyHeadTable() {
   const classes = useStyles();
+  //const token = useToken()
   const [eventos, setEventos] = useState([]);
   useEffect(() => {
+    //console.log(token)
+    const user_save = localStorage.getItem('authentication');
     instance
-      .get('/events')
+      .get(`/events/${user_save}`)
       .then((res) => {
         console.log(res.data);
         setEventos(res.data)

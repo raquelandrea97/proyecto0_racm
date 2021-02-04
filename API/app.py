@@ -100,27 +100,20 @@ def user_loader(user_id):
     """
     return Usuario.query.get(user_id)
 
-class RecursoListarEventos(Resource):
+class RecursoListaUsuario(Resource):
     @app.route("/")
-    def get(self):
-        print(current_user.username)
-        print(Evento.event_owner)
-        if current_user.is_authenticated :
-            eventos = Evento.query.filter(Evento.event_owner == current_user.username).order_by(Evento.id).all()
-            return posts_schema.dump(eventos)
-        else:
-            return jsonify([])
+    def get(self,id):
+        eventos = Evento.query.filter(Evento.event_owner == id).order_by(Evento.id).all()
+        return posts_schema.dump(eventos)
 
-   
     @app.route('/')
     @cross_origin()
-    @login_required
-    def post(self):
+    def post(self,id):
             date_time_obj_start = datetime.strptime(request.json['event_start_date'], '%Y-%m-%d %H:%M:%S.%f')
             date_time_obj_end = datetime.strptime(request.json['event_end_date'], '%Y-%m-%d %H:%M:%S.%f')
 
             nuevo_evento = Evento(
-                event_owner = current_user.username,
+                event_owner = id,
                 event_name = request.json['event_name'],
                 event_category =request.json['event_category'],
                 event_place =request.json['event_place'],
@@ -136,6 +129,41 @@ class RecursoListarEventos(Resource):
             db.session.commit()
 
             return post_schema.dump(nuevo_evento), 201
+
+#class RecursoListarEventos(Resource):
+    # @app.route("/")
+    # def get(self,id):
+    #     if current_user.is_authenticated :
+    #         eventos = Evento.query.filter(Evento.event_owner == current_user.username).order_by(Evento.id).all()
+    #         return posts_schema.dump(eventos)
+    #     else:
+    #         return jsonify([])
+
+   
+    # @app.route('/')
+    # @cross_origin()
+    # @login_required
+    # def post(self):
+    #         date_time_obj_start = datetime.strptime(request.json['event_start_date'], '%Y-%m-%d %H:%M:%S.%f')
+    #         date_time_obj_end = datetime.strptime(request.json['event_end_date'], '%Y-%m-%d %H:%M:%S.%f')
+
+    #         nuevo_evento = Evento(
+    #             event_owner = current_user.username,
+    #             event_name = request.json['event_name'],
+    #             event_category =request.json['event_category'],
+    #             event_place =request.json['event_place'],
+    #             event_address =request.json['event_address'],
+    #             event_start_date =date_time_obj_start,
+    #             event_end_date =date_time_obj_end,
+    #             event_type =request.json['event_type']
+
+    #         )
+
+    #         db.session.add(nuevo_evento)
+
+    #         db.session.commit()
+
+    #         return post_schema.dump(nuevo_evento), 201
 
 class RecursoUnEvento(Resource):
     @login_required
@@ -199,7 +227,7 @@ class Sesiones(Resource):
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
-            return jsonify({'signed_in': True})
+            return jsonify({'signed_in': request.json['username']})
         return jsonify({'signed_in': False})
         
     @app.route("/logout", methods=["GET"])
@@ -218,8 +246,9 @@ class Sesiones(Resource):
         current_user.username
         return "the current user is "+ current_user.username
         
-api.add_resource(RecursoListarEventos, '/events')
+#api.add_resource(RecursoListarEventos, '/events')
 api.add_resource(RecursoUnEvento,'/events/<int:id_evento>')
+api.add_resource(RecursoListaUsuario,'/events/<string:id>')
 
 
 

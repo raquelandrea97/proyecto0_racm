@@ -28,7 +28,8 @@ export default function LogIn() {
   const correoRef = useRef();
   const passwRef = useRef();
   const history = useHistory();
-
+  const token = useToken();
+  const setToken = useUpdateToken();
   const handleSubmit = (e) => {
     instance
       .post(
@@ -51,19 +52,19 @@ export default function LogIn() {
         //const cookies = new Cookies();
         //cookies.set('myCat', 'Pacman', { path: '/' });
         //console.log(cookies.get('myCat'));
-        if (resp.data.signed_in == true) {
+        if (resp.data.signed_in === correoRef.current.children[1].children[0].value) {
             history.push('/');
+            setToken("probando")
         }
         else{
             alert("Clave incorrecta")
         }
       })
       .catch((e) => {
-        alert("Credenciales incorrectas.")
+        console.log(e)
       });
   };
-  const token = useToken();
-  const setToken = useUpdateToken();
+
   return (
     <div>
       <Container maxWidth='md'>
